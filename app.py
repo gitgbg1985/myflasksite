@@ -10,12 +10,42 @@ app.secret_key = "replace-this-secret-key"
 def home():
     return render_template("index.html")
 
+#@app.route("/charts")
+#def charts():
+#    df = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv")
+#    fig = px.line(df, x="Date", y="AAPL.Close", title="Apple Closing Price")
+#    chart_html = fig.to_html(full_html=False)
+#    return render_template("charts.html", chart=chart_html)
 @app.route("/charts")
 def charts():
-    df = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv")
-    fig = px.line(df, x="Date", y="AAPL.Close", title="Apple Closing Price")
-    chart_html = fig.to_html(full_html=False)
-    return render_template("charts.html", chart=chart_html)
+    # 1️⃣ Fetch Apple dataset (always latest from GitHub)
+    df_apple = pd.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv")
+    fig_apple = px.line(
+        df_apple,
+        x="Date",
+        y="AAPL.Close",
+        title="Apple Closing Price"
+    )
+    chart_apple_html = fig_apple.to_html(full_html=False)
+
+    # 2️⃣ Fetch IDA IPCA Infraestrutura dataset (always latest from S3)
+    url_ida = "https://s3-data-prd-use1-precos.s3.us-east-1.amazonaws.com/arquivos/indices-historico/IDAIPCAINFRAESTRUTURA-HISTORICO.xls"
+    df_ida = pd.read_excel(url_ida)
+
+    # Clean and prepare
+    df_ida["Data de Referência"] = pd.to_datetime(df_ida["Data de Referência"], errors="coerce")
+    df_ida = df_ida.sort_values("Data de Referência")
+
+    fig_ida = px.line(
+        df_ida,
+        x="Data de Referência",
+        y="Número Índice",
+        title="IDA IPCA Infraestrutura - Número Índice ao longo do tempo"
+    )
+    chart_ida_html = fig_ida.to_html(full_html=False)
+
+    # Render both charts
+    return render_template("charts.html", chart_apple=chart_apple_html, chart_ida=chart_ida_html)
 
 @app.route("/news")
 def news():

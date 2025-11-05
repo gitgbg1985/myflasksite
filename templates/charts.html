@@ -1,5 +1,58 @@
-{% extends "base.html" %}
-{% block content %}
-<h1>Public Dataset Charts</h1>
-{{ chart|safe }}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Gráficos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #fafafa;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            margin: 40px auto;
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .refresh {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard de Gráficos</h1>
+
+    <div class="refresh">
+        <button onclick="window.location.reload()">Atualizar Dados</button>
+    </div>
+
+    <div class="chart-container">
+        <h2>Apple Closing Price</h2>
+        {{ chart_apple|safe }}
+    </div>
+
+    <div class="chart-container">
+        <h2>IDA IPCA Infraestrutura</h2>
+        {{ chart_ida|safe }}
+    </div>
+</body>
+</html>
