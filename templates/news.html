@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Latest News</h1>
+<ul>
+  {% for item in articles %}
+  <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}
