@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import pandas as pd
 import plotly.express as px
 import requests
+import openpyxl
 
 app = Flask(__name__)
 app.secret_key = "replace-this-secret-key"
